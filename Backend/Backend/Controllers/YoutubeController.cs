@@ -2,6 +2,7 @@ using Backend.Model;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
+using YoutubeExplode.Search; 
 
 namespace Backend.Controllers;
 
@@ -25,6 +26,29 @@ public class YoutubeController : ControllerBase
                 Image = video.Thumbnails[2].Url
             };
             return Ok(videoInfo);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, $"An error occurred: {e.Message}");
+        }
+    }
+    
+    [HttpGet("Search")]
+    public async Task<ActionResult> Search(string name)
+    {
+        try
+        {
+            var results = _youtubeClient.Search.GetVideosAsync(name);
+
+            var firstTenResults = new List<VideoSearchResult>();
+            await foreach (var result in results)
+            {
+                firstTenResults.Add(result);
+                if (firstTenResults.Count >= 5)
+                    break;
+            }
+
+            return Ok(firstTenResults);
         }
         catch (Exception e)
         {
