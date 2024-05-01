@@ -1,4 +1,5 @@
 using Backend.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
@@ -77,6 +78,32 @@ public class YoutubeController : ControllerBase
         catch (Exception e)
         {
             return StatusCode(500, $"An error occurred: {e.Message}");
+        }
+    }
+
+    [HttpGet("test"), Authorize(Roles="User, Admin")]
+    public ActionResult Test()
+    {
+        try
+        {
+            return Ok("test");
+        }
+        catch (Exception e)
+        {
+            return NotFound("Error getting data");
+        }
+    }
+    
+    [HttpGet("testAdmin"), Authorize(Roles="Admin")]
+    public ActionResult TestAdmin()
+    {
+        try
+        {
+            return Ok("test12");
+        }
+        catch (Exception e)
+        {
+            return NotFound("Error getting data");
         }
     }
 }
