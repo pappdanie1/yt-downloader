@@ -1,69 +1,55 @@
 import React, {useState, useEffect} from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-    const [data, setData] = useState();
-    const [url, setUrl] = useState('');
+    const [search, setSearch] = useState('');
+    const [videos, setVideos] = useState([])
 
-    const fetchData = async () => {
+    const fetchVideos = async () => {
         try {
-            const response = await fetch(`http://localhost:5048/Youtube/VideoInfo?url=${url}`);
+            const response = await fetch(`http://localhost:5048/Youtube/Search?name=${search}`);
             const data = await response.json();
-            setData(data);
+            setVideos(data);
         } catch(err) {
-            console.error(err);
-        }
-    };
-
-    const handleDownload = async () => {
-        try {
-            const response = await fetch(`http://localhost:5048/Youtube/Mp3Downloader?url=${url}`);
-            const blob = await response.blob();
-            const downloadUrl = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.setAttribute('download', `${data.title}.mp3`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (err) {
             console.error(err);
         }
     }
 
     const handleSearchClick = () => {
-        fetchData(); 
+        fetchVideos();
     };
 
     const handleSearchChange = (e) => {
-        setUrl(e.target.value);
+        setSearch(e.target.value)
     };
 
-    console.log(data);
+    console.log(videos);
 
     return (
         <div>
+            <input
+                type="text"
+                placeholder="Enter title here"
+                value={search}
+                onChange={handleSearchChange}
+            />
+            <button onClick={handleSearchClick} >Search</button>
             <div>
-                {data ? (
+                {videos ? (
                     <div>
-                        <h3>{data.title}</h3>
-                        <p>Author: {data.author}</p>
-                        <p>Length: {data.duration}</p>
-                        <img src={data.image} alt="thumbnail" />
-                        <div>
-                        <button onClick={handleDownload} >Download mp3</button>
-                        </div>
+                        {videos.map((video, index) => (
+                            <div key={index} >
+                                <Link to={`/video/${video.id.value}`}>
+                                    <h3>{video.title}</h3>
+                                    <img src={video.thumbnails[0].url} alt="thumbnail" />
+                                </Link>
+                            </div>
+                        ))}
                     </div>
                 ) : (
                     <></>
                 )}
             </div>
-            <input
-                type="text"
-                placeholder="Enter video url here"
-                value={url}
-                onChange={handleSearchChange}
-            />
-            <button onClick={handleSearchClick}>Search</button>
         </div>
     );
 }
