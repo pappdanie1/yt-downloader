@@ -21,6 +21,7 @@ public class YoutubeController : ControllerBase
             var video = await _youtubeClient.Videos.GetAsync(url);
             var videoInfo = new VideoInfo
             {
+                videoId = video.Id.Value,
                 Title = video.Title,
                 Author = video.Author.ChannelTitle,
                 Duration = video.Duration.ToString(),
