@@ -18,7 +18,7 @@ function App() {
     <BrowserRouter>
     <Header setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
       <Routes>
-        <Route path="/" element={<Home isAdmin={isAdmin} />}/>
+        <Route path="/" element={<Home isAdmin={isAdmin} isLoggedIn={isLoggedIn}/>}/>
         <Route path="video/:videoId" element={<Video isLoggedIn={isLoggedIn} />} />
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setIsAdmin={setIsAdmin}/>} />
         <Route path="/register" element={<Register />} />
