@@ -2,13 +2,13 @@ import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import '../css/Home.css'
 
-const Home = ({ isAdmin }) => {
+const Home = ({ isAdmin, isLoggedIn }) => {
     const [search, setSearch] = useState('');
     const [url, setUrl] = useState('');
     const [videos, setVideos] = useState([]);
     const [video, setVideo] = useState({});
     const [isSearch, setIsSearch] = useState(false);
-    const [data, setData] = useState([])
+    const [featured, setFeatured] = useState([])
 
     const fetchVideos = async () => {
         try {
@@ -25,24 +25,28 @@ const Home = ({ isAdmin }) => {
             try {
                 const response = await fetch('http://localhost:5048/FeaturedVideos/GetAll');
                 const data = await response.json();
-                setData(data);
+                setFeatured(data);
             } catch(err) {
                 console.error(err);;
             };
         };
         fetchData();
-    }, [url]);
+    }, []);
 
-    const fetchVideoInfo = async () => {
-        try {
-            const response = await fetch(`http://localhost:5048/Youtube/VideoInfo?url=${url}`);
-            const data = await response.json();
-            setVideo(data);
-        } catch(err) {
-            console.error(err);
+    useEffect(() => {
+        const fetchVideoInfo = async () => {
+            try {
+                const response = await fetch(`http://localhost:5048/Youtube/VideoInfo?url=${url}`);
+                const data = await response.json();
+                setVideo(data);
+            } catch(err) {
+                console.error(err);
+            }
         }
-    }
-    console.log(video);
+        if (url.trim() !== '') {
+            fetchVideoInfo();
+        }
+    }, [url]);
 
     const handleSearchClick = () => {
         fetchVideos();
@@ -53,12 +57,7 @@ const Home = ({ isAdmin }) => {
         setSearch(e.target.value);
     };
 
-    const handleUrlCHange = (e) => {
-        setUrl(e.target.value);
-    };
-
     const handleAddFeatured = async () => {
-        fetchVideoInfo();
         try {
             const response = await fetch('http://localhost:5048/FeaturedVideos/Add', {
                 method: 'Post',
@@ -110,7 +109,7 @@ const Home = ({ isAdmin }) => {
                     type="text"
                     placeholder="Enter url here"
                     value={url}
-                    onChange={handleUrlCHange}
+                    onChange={(e) => setUrl(e.target.value)}
                     />
                     <button className="search-btn" onClick={handleAddFeatured}>Add</button>
                 </>
@@ -129,7 +128,7 @@ const Home = ({ isAdmin }) => {
                         </div>
                     ))    
                 ) : (
-                    data.map((video, index) => (
+                    featured.map((video, index) => (
                         <div className="video-card" key={index}>
                             <Link to={`/video/${video.videoId}`}>
                                 <img src={video.image} alt="thumbnail" />
@@ -137,7 +136,7 @@ const Home = ({ isAdmin }) => {
                                     <h3>{video.title}</h3>
                                 </div>
                             </Link>
-                            <button onClick={(e) => handleRemove(e, video.id)} className="delete-btn">Delete</button>
+                            {isAdmin && isLoggedIn ? (<button onClick={(e) => handleRemove(e, video.id)} className="delete-btn">Delete</button>) : null}
                         </div>
                     ))
                 )}
