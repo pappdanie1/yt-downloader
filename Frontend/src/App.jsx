@@ -6,6 +6,8 @@ import Video from './Pages/Video';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Header from './Components/Header';
+import ProtectedRoute from './Components/ProtectedRoute'
+import Profile from './Pages/Profile';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !==  null ? true : false);
@@ -18,6 +20,7 @@ function App() {
         <Route path="video/:videoId" element={<Video />}/>
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile/:username" element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
       </Routes>
     </BrowserRouter>
   )
