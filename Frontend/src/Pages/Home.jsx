@@ -2,9 +2,13 @@ import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import '../css/Home.css'
 
-const Home = () => {
+const Home = ({ isAdmin }) => {
     const [search, setSearch] = useState('');
-    const [videos, setVideos] = useState([])
+    const [url, setUrl] = useState('');
+    const [videos, setVideos] = useState([]);
+    const [video, setVideo] = useState({});
+    const [isSearch, setIsSearch] = useState(false);
+    const [data, setData] = useState([])
 
     const fetchVideos = async () => {
         try {
@@ -16,15 +20,77 @@ const Home = () => {
         }
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:5048/FeaturedVideos/GetAll');
+                const data = await response.json();
+                setData(data);
+            } catch(err) {
+                console.error(err);;
+            };
+        };
+        fetchData();
+    }, [url]);
+
+    const fetchVideoInfo = async () => {
+        try {
+            const response = await fetch(`http://localhost:5048/Youtube/VideoInfo?url=${url}`);
+            const data = await response.json();
+            setVideo(data);
+        } catch(err) {
+            console.error(err);
+        }
+    }
+    console.log(video);
+
     const handleSearchClick = () => {
         fetchVideos();
+        setIsSearch(true);
     };
 
     const handleSearchChange = (e) => {
-        setSearch(e.target.value)
+        setSearch(e.target.value);
     };
 
-    console.log(videos);
+    const handleUrlCHange = (e) => {
+        setUrl(e.target.value);
+    };
+
+    const handleAddFeatured = async () => {
+        fetchVideoInfo();
+        try {
+            const response = await fetch('http://localhost:5048/FeaturedVideos/Add', {
+                method: 'Post',
+                headers: { 'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: JSON.stringify({ title: video.title, author: video.author, image: video.image, duration: video.duration, url: video.url, videoId: video.videoId })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            window.location.reload();
+        } catch(err) {
+            console.error(err);
+        };
+    };
+
+    const handleRemove = async (e, id) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:5048/FeaturedVideos/Delete?id=${id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                })
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            window.location.reload();
+        } catch(err) {
+            console.error(err);
+        };
+    };
 
     return (
         <div className="search">
@@ -36,17 +102,45 @@ const Home = () => {
                 onChange={handleSearchChange}
             />
             <button className="search-btn" onClick={handleSearchClick}>Search</button>
+            {isAdmin && !isSearch ? (
+                <>
+                    <h3>Add Featured Video</h3>
+                    <input
+                    className="searchbar"
+                    type="text"
+                    placeholder="Enter url here"
+                    value={url}
+                    onChange={handleUrlCHange}
+                    />
+                    <button className="search-btn" onClick={handleAddFeatured}>Add</button>
+                </>
+            ) : null}
+            {isSearch ? null : <><h2 className="futured-title" >Featured Videos</h2></>}
             <div className="video-results">
-                {videos.map((video, index) => (
-                    <div className="video-card" key={index}>
-                        <Link to={`/video/${video.id.value}`}>
-                            <img src={video.thumbnails[0].url} alt="thumbnail" />
-                            <div className="video-card-content">
-                                <h3>{video.title}</h3>
-                            </div>
-                        </Link>
-                    </div>
-                ))}
+                {isSearch ? (
+                    videos.map((video, index) => (
+                        <div className="video-card" key={index}>
+                            <Link to={`/video/${video.id.value}`}>
+                                <img src={video.thumbnails[0].url} alt="thumbnail" />
+                                <div className="video-card-content">
+                                    <h3>{video.title}</h3>
+                                </div>
+                            </Link>
+                        </div>
+                    ))    
+                ) : (
+                    data.map((video, index) => (
+                        <div className="video-card" key={index}>
+                            <Link to={`/video/${video.videoId}`}>
+                                <img src={video.image} alt="thumbnail" />
+                                <div className="video-card-content">
+                                    <h3>{video.title}</h3>
+                                </div>
+                            </Link>
+                            <button onClick={(e) => handleRemove(e, video.id)} className="delete-btn">Delete</button>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );
