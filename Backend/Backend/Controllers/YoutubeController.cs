@@ -81,30 +81,29 @@ public class YoutubeController : ControllerBase
             return StatusCode(500, $"An error occurred: {e.Message}");
         }
     }
-
-    [HttpGet("test"), Authorize(Roles="User, Admin")]
-    public ActionResult Test()
+    
+    [HttpGet("Mp4Downloader")]
+    public async Task<ActionResult> DownloadMp4(string url)
     {
         try
         {
-            return Ok("test");
+            var streamManifest = await _youtubeClient.Videos.Streams.GetManifestAsync(url);
+            var audio = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
+        
+            var video = await _youtubeClient.Videos.GetAsync(url);
+        
+            var tempFilePath = $"{Path.GetTempPath()}{video.Title}.mp4";
+        
+            await _youtubeClient.Videos.Streams.DownloadAsync(audio, tempFilePath);
+            
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(tempFilePath);
+            
+            return File(fileBytes, "audio/mpeg", $"{video.Title}.mp4");
         }
         catch (Exception e)
         {
-            return NotFound("Error getting data");
+            return StatusCode(500, $"An error occurred: {e.Message}");
         }
     }
     
-    [HttpGet("testAdmin"), Authorize(Roles="Admin")]
-    public ActionResult TestAdmin()
-    {
-        try
-        {
-            return Ok("test12");
-        }
-        catch (Exception e)
-        {
-            return NotFound("Error getting data");
-        }
-    }
 }
