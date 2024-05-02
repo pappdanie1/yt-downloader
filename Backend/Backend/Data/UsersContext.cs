@@ -1,10 +1,11 @@
+using Backend.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data;
 
-public class UsersContext : IdentityDbContext<IdentityUser, IdentityRole, string>
+public class UsersContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
 {
     private readonly IConfiguration _configuration;
 
@@ -12,6 +13,8 @@ public class UsersContext : IdentityDbContext<IdentityUser, IdentityRole, string
     {
         _configuration = configuration;
     }
+    
+    public DbSet<FavouriteVideo> Favourites { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -22,8 +25,16 @@ public class UsersContext : IdentityDbContext<IdentityUser, IdentityRole, string
         });
     }
     
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<FavouriteVideo>()
+            .HasOne(e => e.User)
+            .WithMany(e => e.Favourites)
+            .HasForeignKey(e => e.UserId)
+            .IsRequired();
     }
+
 }

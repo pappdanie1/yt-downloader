@@ -6,11 +6,11 @@ public class AuthenticationSeeder
 {
     
     private RoleManager<IdentityRole> _roleManager;
-    private UserManager<IdentityUser> _userManager;
+    private UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
     
 
-    public AuthenticationSeeder(RoleManager<IdentityRole> roleManager, IConfiguration configuration, UserManager<IdentityUser> userManager)
+    public AuthenticationSeeder(RoleManager<IdentityRole> roleManager, IConfiguration configuration, UserManager<ApplicationUser> userManager)
     {
         _roleManager = roleManager;
         _configuration = configuration;
@@ -48,7 +48,7 @@ public class AuthenticationSeeder
         var adminInDb = await _userManager.FindByEmailAsync("admin@admin.com");
         if (adminInDb == null)
         {
-            var admin = new IdentityUser { UserName = "admin", Email = "admin@admin.com" };
+            var admin = new ApplicationUser() { UserName = "admin", Email = "admin@admin.com" };
             var adminCreated = await _userManager.CreateAsync(admin, "admin123");
 
             if (adminCreated.Succeeded)

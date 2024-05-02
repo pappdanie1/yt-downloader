@@ -1,13 +1,14 @@
+using Backend.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Services.Authentication;
 
 public class AuthService : IAuthService
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITokenService _tokenService;
 
-    public AuthService(UserManager<IdentityUser> userManager, ITokenService tokenService)
+    public AuthService(UserManager<ApplicationUser> userManager, ITokenService tokenService)
     {
         _userManager = userManager;
         _tokenService = tokenService;
@@ -15,7 +16,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthResult> RegisterAsync(string email, string username, string password, string role)
     {
-        var user = new IdentityUser { UserName = username, Email = email };
+        var user = new ApplicationUser { UserName = username, Email = email };
         var result = await _userManager.CreateAsync(user, password);
 
         if (!result.Succeeded)

@@ -1,6 +1,9 @@
 using System.Text;
+using System.Text.Json.Serialization;
+using Backend.Controllers;
 using Backend.Data;
 using Backend.Services.Authentication;
+using Backend.Services.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +15,7 @@ ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 IConfiguration secret = configurationBuilder.AddUserSecrets<Program>().Build();
 IConfiguration config = configurationBuilder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .Build();
+
 
 AddServices();
 ConfigureSwagger();
@@ -50,10 +54,13 @@ app.Run();
 void AddServices()
 {
     builder.Services.AddControllers();
+    builder.Services.AddControllers().AddJsonOptions(x =>
+        x.JsonSerializerOptions.ReferenceHandler =  ReferenceHandler.Preserve);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<ITokenService, TokenService>();
     builder.Services.AddScoped<AuthenticationSeeder>();
+    builder.Services.AddScoped<IFavoriteVideoRepository, FavoriteVideoRepository>();
 }
 
 void ConfigureSwagger()
@@ -121,7 +128,7 @@ void AddAuthentication()
 void AddIdentity()
 {
     builder.Services
-        .AddIdentityCore<IdentityUser>(options =>
+        .AddIdentityCore<ApplicationUser>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
             options.User.RequireUniqueEmail = true;
