@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
+import '../css/Home.css'
 
 const Home = () => {
     const [search, setSearch] = useState('');
@@ -26,29 +27,26 @@ const Home = () => {
     console.log(videos);
 
     return (
-        <div>
+        <div className="search">
             <input
+                className="searchbar"
                 type="text"
                 placeholder="Enter title here"
                 value={search}
                 onChange={handleSearchChange}
             />
-            <button onClick={handleSearchClick} >Search</button>
-            <div>
-                {videos ? (
-                    <div>
-                        {videos.map((video, index) => (
-                            <div key={index} >
-                                <Link to={`/video/${video.id.value}`}>
-                                    <h3>{video.title}</h3>
-                                    <img src={video.thumbnails[0].url} alt="thumbnail" />
-                                </Link>
+            <button className="search-btn" onClick={handleSearchClick}>Search</button>
+            <div className="video-results">
+                {videos.map((video, index) => (
+                    <div className="video-card" key={index}>
+                        <Link to={`/video/${video.id.value}`}>
+                            <img src={video.thumbnails[0].url} alt="thumbnail" />
+                            <div className="video-card-content">
+                                <h3>{video.title}</h3>
                             </div>
-                        ))}
+                        </Link>
                     </div>
-                ) : (
-                    <></>
-                )}
+                ))}
             </div>
         </div>
     );
