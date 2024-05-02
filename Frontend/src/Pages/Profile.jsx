@@ -19,7 +19,7 @@ const Profile = () => {
         fetchData();
     }, [])
 
-    const handleDownload = async (music) => {
+    const handleDownloadMp3 = async (music) => {
         try {
             const response = await fetch(`http://localhost:5048/Youtube/Mp3Downloader?url=${music.url}`);
             const blob = await response.blob();
@@ -27,6 +27,22 @@ const Profile = () => {
             const link = document.createElement('a');
             link.href = downloadUrl;
             link.setAttribute('download', `${music.title}.mp3`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const handleDownloadMp4 = async (music) => {
+        try {
+            const response = await fetch(`http://localhost:5048/Youtube/Mp4Downloader?url=${music.url}`);
+            const blob = await response.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.setAttribute('download', `${music.title}.mp4`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -60,7 +76,8 @@ const Profile = () => {
                         <p className="favourite-title">{item.title}</p>
                         <img src={item.image} alt="" className="favourite-image" />
                         <div className="video-buttons" >
-                            <button onClick={() => handleDownload(item)} >Download</button>
+                            <button onClick={() => handleDownloadMp3(item)} >mp3</button>
+                            <button onClick={() => handleDownloadMp4(item)} >mp4</button>
                             <button onClick={() => handleRemove(item)} >Remove</button>
                         </div>
                     </div>

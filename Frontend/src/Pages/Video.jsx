@@ -68,7 +68,7 @@ const Video = ({ isLoggedIn }) => {
         setFav(favourites.find(video => video.url === data.url))
     }, [favourites, data.url]);
 
-    const handleDownload = async () => {
+    const handleDownloadMp3 = async () => {
         try {
             const response = await fetch(`http://localhost:5048/Youtube/Mp3Downloader?url=${videoId}`);
             const blob = await response.blob();
@@ -76,6 +76,22 @@ const Video = ({ isLoggedIn }) => {
             const link = document.createElement('a');
             link.href = downloadUrl;
             link.setAttribute('download', `${data.title}.mp3`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const handleDownloadMp4 = async () => {
+        try {
+            const response = await fetch(`http://localhost:5048/Youtube/Mp4Downloader?url=${videoId}`);
+            const blob = await response.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.setAttribute('download', `${data.title}.mp4`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -126,7 +142,8 @@ const Video = ({ isLoggedIn }) => {
             <p>{data.duration}</p>
             <img src={data.image} alt="thumbnail" />
             <div className="video-buttons">
-                <button onClick={handleDownload}>Download mp3</button>
+                <button onClick={handleDownloadMp3}>mp3</button>
+                <button onClick={handleDownloadMp4}>mp4</button>
                 <button onClick={handleBack}>Cancel</button>
                 {isLoggedIn ? (
                     <button onClick={handleToggleFavourites}>{isInFavourites ? "Remove from favourites" : "Add to favourites"}</button>
