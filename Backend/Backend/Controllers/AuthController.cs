@@ -1,5 +1,8 @@
 using Backend.Contracts;
+using Backend.Data;
+using Backend.Migrations;
 using Backend.Services.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -9,10 +12,12 @@ namespace Backend.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authenticationService;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AuthController(IAuthService authenticationService)
+    public AuthController(IAuthService authenticationService, UserManager<ApplicationUser> userManager)
     {
         _authenticationService = authenticationService;
+        _userManager = userManager;
     }
 
     [HttpPost("Register")]
@@ -50,7 +55,7 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        return Ok(new AuthResponse(result.Email, result.UserName, result.Token));
+        return Ok(new AuthResponse(result.Email, result.UserName, result.Token, result.Role));
     }
 
     private void AddErrors(AuthResult result)
