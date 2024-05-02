@@ -1,5 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import '../css/Video.css'
 
 const Video = () => {
     const navigate = useNavigate();
@@ -41,16 +42,16 @@ const Video = () => {
 
 
     return (
-        <div>
+        <div className="video-container">
             <h3>{data.title}</h3>
-            <p>Author: {data.author}</p>
-            <p>Length: {data.duration}</p>
+            <p>{data.author}</p>
+            <p>{data.duration}</p>
             <img src={data.image} alt="thumbnail" />
-            <div>
-                <button onClick={handleDownload} >Download mp3</button>
+            <div className="video-buttons">
+                <button onClick={handleDownload}>Download mp3</button>
+                <button onClick={handleBack}>Cancel</button>
             </div>
-            <button onClick={handleBack} >Cancel</button>
-        </div>
+    </div>
     )
 }
 
