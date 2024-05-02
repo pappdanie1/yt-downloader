@@ -55,7 +55,7 @@ void AddServices()
 {
     builder.Services.AddControllers();
     builder.Services.AddControllers().AddJsonOptions(x =>
-        x.JsonSerializerOptions.ReferenceHandler =  ReferenceHandler.Preserve);
+        x.JsonSerializerOptions.ReferenceHandler =  ReferenceHandler.IgnoreCycles);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<ITokenService, TokenService>();
