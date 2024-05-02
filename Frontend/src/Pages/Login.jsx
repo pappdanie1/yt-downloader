@@ -19,7 +19,9 @@ const Login = ({ setIsLoggedIn }) => {
             if(response.ok) {
                 const data = await response.json();
                 const token = data.token;
+                const userName = data.userName
                 localStorage.setItem('token', token);
+                localStorage.setItem('userName', userName);
                 setIsLoggedIn(true)
                 navigate("/")
             } else {
