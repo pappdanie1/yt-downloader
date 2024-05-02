@@ -15,6 +15,7 @@ public class UsersContext : IdentityDbContext<ApplicationUser, IdentityRole, str
     }
     
     public DbSet<FavouriteVideo> Favourites { get; set; }
+    public DbSet<FeaturedVideo> FeaturedVideos { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
