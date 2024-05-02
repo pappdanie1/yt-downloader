@@ -11,14 +11,16 @@ import Profile from './Pages/Profile';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !==  null ? true : false);
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem('role') ===  "Admin" ? true : false);
+  console.log(isAdmin);
 
   return (
     <BrowserRouter>
-    <Header setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn}/>
+    <Header setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="video/:videoId" element={<Video isLoggedIn={isLoggedIn} />} />
-        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
+        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setIsAdmin={setIsAdmin}/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile/:username" element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
       </Routes>

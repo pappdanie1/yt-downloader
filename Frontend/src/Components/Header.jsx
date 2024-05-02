@@ -3,13 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import '../css/Header.css'
 
 
-const Header = ({ setIsLoggedIn, isLoggedIn }) => {
+const Header = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('username');
+        localStorage.removeItem('role');
         setIsLoggedIn(false);
+        setIsAdmin(false);
         navigate("/")
     };
 
@@ -17,6 +19,7 @@ const Header = ({ setIsLoggedIn, isLoggedIn }) => {
         <nav className="navbar">
             <div className="navbar-container">
                 <Link to={'/'} className="navbar-logo">Youtube Downloader</Link>
+                    {isAdmin ? (<h1 className="admin-title">Admin</h1>) : null}
                     {isLoggedIn ? (
                         <div>
                             <ul className="nav-menu">

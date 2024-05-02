@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import'../css/Login.css'
 
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = ({ setIsLoggedIn, setIsAdmin }) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -19,17 +19,20 @@ const Login = ({ setIsLoggedIn }) => {
             if(response.ok) {
                 const data = await response.json();
                 const token = data.token;
-                const userName = data.userName
+                const userName = data.userName;;
                 localStorage.setItem('token', token);
                 localStorage.setItem('userName', userName);
-                setIsLoggedIn(true)
+                localStorage.setItem('role', data.role);
+                console.log(data.role);
+                setIsLoggedIn(true);
+                setIsAdmin((localStorage.getItem('role') ===  "Admin" ? true : false));
                 navigate("/")
             } else {
                 const data = await response.json();
-                window.alert(data['Bad credentials'][0])
+                window.alert(data['Bad credentials'][0]);
             }
         } catch(err) {
-            console.error(err)
+            console.error(err);;
         }
     }
 
