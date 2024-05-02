@@ -1,0 +1,49 @@
+.video-container {
+    max-width: 800px; 
+    margin: 50px auto; 
+    padding: 20px; 
+    background-color: #f1f1f1; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    text-align: center;
+}
+
+.video-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px; 
+}
+
+.video-info {
+    margin-top: 20px; 
+}
+
+.video-info h3 {
+    font-size: 24px; 
+    margin-bottom: 10px; 
+}
+
+.video-info p {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+.video-buttons {
+    margin-top: 20px;
+}
+
+.video-buttons button {
+    padding: 10px 20px; 
+    margin-right: 10px; 
+    font-size: 16px; 
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer;
+}
+
+.video-buttons button:hover {
+    background-color: #dddbdb; 
+}

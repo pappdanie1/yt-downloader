@@ -1,0 +1,69 @@
+.search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px auto;
+    width: 60%;
+}
+
+.searchbar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: calc(100% - 120px); /* Adjust width to accommodate button */
+    margin-bottom: 10px;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    max-width: 100px;
+}
+
+.search-btn:hover {
+    background-color: #444;
+}
+
+.video-results {
+    display: flex;
+    flex-wrap: wrap; /* Wrap the video cards */
+    justify-content: space-between; /* Distribute items evenly */
+    margin-top: 20px;
+    width: 100%; /* Ensure full width */
+}
+
+.video-card {
+    flex: 0 0 calc(33.33% - 20px); /* Adjust width of video cards */
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    cursor: pointer;
+    overflow: hidden; /* Hide overflow content */
+}
+
+.video-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.video-card img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.video-card-content {
+    padding: 10px;
+}
+
+.video-card h3 {
+    margin: 0;
+    font-size: 16px;
+}
