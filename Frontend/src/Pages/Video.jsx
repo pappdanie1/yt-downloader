@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import '../css/Video.css'
 
-const Video = () => {
+const Video = ({ isLoggedIn }) => {
     const navigate = useNavigate();
     const [data, setData] = useState({});
     const [favourites, setFavourites] = useState([])
@@ -128,7 +128,11 @@ const Video = () => {
             <div className="video-buttons">
                 <button onClick={handleDownload}>Download mp3</button>
                 <button onClick={handleBack}>Cancel</button>
-                <button onClick={handleToggleFavourites}>{isInFavourites ? "Remove from favourites" : "Add to favourites"}</button>
+                {isLoggedIn ? (
+                    <button onClick={handleToggleFavourites}>{isInFavourites ? "Remove from favourites" : "Add to favourites"}</button>
+                ) : (
+                    <></>
+                )}
             </div>
     </div>
     )
