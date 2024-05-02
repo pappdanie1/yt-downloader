@@ -24,7 +24,8 @@ public class YoutubeController : ControllerBase
                 Title = video.Title,
                 Author = video.Author.ChannelTitle,
                 Duration = video.Duration.ToString(),
-                Image = video.Thumbnails[2].Url
+                Image = video.Thumbnails[2].Url,
+                Url = video.Url
             };
             return Ok(videoInfo);
         }
