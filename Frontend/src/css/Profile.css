@@ -2,6 +2,10 @@
     margin: 50px auto;
     max-width: 800px;
     padding: 20px;
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    text-align: center;
 }
 
 .profile-title {
