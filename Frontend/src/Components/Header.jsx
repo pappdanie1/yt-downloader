@@ -8,6 +8,7 @@ const Header = ({ setIsLoggedIn, isLoggedIn }) => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
         setIsLoggedIn(false);
         navigate("/")
     };
@@ -23,7 +24,7 @@ const Header = ({ setIsLoggedIn, isLoggedIn }) => {
                                     <Link to={'/'} className="nav-link">Home</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to={'/profile'} className="nav-link">Profile</Link>
+                                    <Link to={`/profile/${localStorage.getItem('userName')}`} className="nav-link">Profile</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link onClick={handleLogout} className="nav-link">Logout</Link>
