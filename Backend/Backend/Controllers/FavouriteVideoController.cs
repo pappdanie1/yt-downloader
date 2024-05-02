@@ -17,11 +17,11 @@ public class FavouriteVideoController : ControllerBase
     }
     
     [HttpGet("GetAllFavourites"), Authorize(Roles="User, Admin")]
-    public ActionResult GetFavoriteVideos(string userId)
+    public ActionResult GetFavoriteVideos(string userName)
     {
         try
         {
-            var favoriteVideos = _favoriteVideoRepository.GetAll(userId);
+            var favoriteVideos = _favoriteVideoRepository.GetAll(userName);
             return Ok(favoriteVideos);
         }
         catch (Exception e)

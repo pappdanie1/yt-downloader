@@ -26,8 +26,8 @@ public class UserController : ControllerBase
     {
         try
         {
-            var userId = User.FindAll(ClaimTypes.NameIdentifier).Skip(1).FirstOrDefault().Value;
-            var favoriteVideos = _favoriteVideoRepository.GetAll(userId);
+            var userName = User.FindAll(ClaimTypes.Name).FirstOrDefault().Value;
+            var favoriteVideos = _favoriteVideoRepository.GetAll(userName);
             return Ok(favoriteVideos);
         }
         catch (Exception e)
@@ -41,8 +41,8 @@ public class UserController : ControllerBase
     {
         try
         {
-            var userId = User.FindAll(ClaimTypes.NameIdentifier).Skip(1).FirstOrDefault().Value;
-            var favoriteVideo = _favoriteVideoRepository.GetById(id, userId);
+            var userName = User.FindAll(ClaimTypes.Name).FirstOrDefault().Value;
+            var favoriteVideo = _favoriteVideoRepository.GetById(id, userName);
             if (favoriteVideo == null)
             {
                 return NotFound();

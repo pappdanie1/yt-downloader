@@ -13,18 +13,18 @@ public class FavoriteVideoRepository : IFavoriteVideoRepository
         _context = context;
     }
     
-    public IEnumerable<FavouriteVideo> GetAll(string userId)
+    public IEnumerable<FavouriteVideo> GetAll(string userName)
     {
         return _context.Favourites
-            .Where(f => f.UserId == userId)
+            .Where(f => f.User.UserName == userName)
             .ToList();
     }
 
-    public FavouriteVideo? GetById(int id, string userId)
+    public FavouriteVideo? GetById(int id, string userName)
     {
         return _context.Favourites
             .Include(f => f.User)
-            .FirstOrDefault(f => f.Id == id && f.UserId == userId);
+            .FirstOrDefault(f => f.Id == id && f.User.UserName == userName);
     }
 
     public void Add(FavouriteVideo favouriteVideo)

@@ -4,8 +4,8 @@ namespace Backend.Services.Repositories;
 
 public interface IFavoriteVideoRepository
 {
-    IEnumerable<FavouriteVideo> GetAll(string userId);
-    FavouriteVideo? GetById(int id, string userId);
+    IEnumerable<FavouriteVideo> GetAll(string userName);
+    FavouriteVideo? GetById(int id, string userName);
     void Add(FavouriteVideo favouriteVideo);
     void Delete(FavouriteVideo favouriteVideo);
 }

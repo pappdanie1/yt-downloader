@@ -24,7 +24,7 @@ public class YoutubeController : ControllerBase
                 Title = video.Title,
                 Author = video.Author.ChannelTitle,
                 Duration = video.Duration.ToString(),
-                Image = video.Thumbnails[2].Url,
+                Image = video.Thumbnails[4].Url,
                 Url = video.Url
             };
             return Ok(videoInfo);
@@ -42,15 +42,15 @@ public class YoutubeController : ControllerBase
         {
             var results = _youtubeClient.Search.GetVideosAsync(name);
 
-            var firstTenResults = new List<VideoSearchResult>();
+            var videoResults = new List<VideoSearchResult>();
             await foreach (var result in results)
             {
-                firstTenResults.Add(result);
-                if (firstTenResults.Count >= 5)
+                videoResults.Add(result);
+                if (videoResults.Count >= 6)
                     break;
             }
 
-            return Ok(firstTenResults);
+            return Ok(videoResults);
         }
         catch (Exception e)
         {
