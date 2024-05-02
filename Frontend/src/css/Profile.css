@@ -1,0 +1,34 @@
+.profile-container {
+    margin: 50px auto;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.profile-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.profile-favourites {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.profile-favourite {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.favourite-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.favourite-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
