@@ -17,7 +17,7 @@ function App() {
     <Header setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn}/>
       <Routes>
         <Route path="/" element={<Home />}/>
-        <Route path="video/:videoId" element={<Video />}/>
+        <Route path="video/:videoId" element={<Video isLoggedIn={isLoggedIn} />} />
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile/:username" element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
