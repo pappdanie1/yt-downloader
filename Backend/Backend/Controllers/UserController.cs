@@ -66,7 +66,6 @@ public class UserController : ControllerBase
             }
 
             var userId = User.FindAll(ClaimTypes.NameIdentifier).Skip(1).FirstOrDefault().Value;
-            Console.WriteLine(userId);
             var user = await _userManager.FindByIdAsync(userId);
             favouriteVideo.UserId = userId;
             favouriteVideo.User = user;
