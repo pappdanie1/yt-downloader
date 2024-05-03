@@ -7,7 +7,6 @@ const Video = ({ isLoggedIn }) => {
     const [data, setData] = useState({});
     const [favourites, setFavourites] = useState([])
     const { videoId } = useParams();
-    const [isClicked, setIsClicked] = useState(false)
     const [isInFavourites, setIsInFavourites] = useState(false);
     const [fav, setFav] = useState({});
 
@@ -37,7 +36,7 @@ const Video = ({ isLoggedIn }) => {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchVideo = async () => {
             try {
                 const response = await fetch(`http://localhost:5048/Youtube/VideoInfo?url=${videoId}`);
                 const data = await response.json();
@@ -46,11 +45,8 @@ const Video = ({ isLoggedIn }) => {
                 console.error(err);
             }
         };
-        fetchData();
-    }, [videoId]);
-
-    useEffect(() => {
-        const fetchData = async () => {
+        fetchVideo();
+        const fetchFavs = async () => {
             const response = await fetch(`http://localhost:5048/User/GetAllFavourites`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -59,9 +55,8 @@ const Video = ({ isLoggedIn }) => {
             const data = await response.json();
             setFavourites(data);
         }
-        fetchData();
-    }, [])
-
+        fetchFavs();
+    }, [videoId]);
 
     useEffect(() => {
         setIsInFavourites(favourites.some(video => video.url === data.url));
@@ -127,13 +122,11 @@ const Video = ({ isLoggedIn }) => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
             }
-            setIsClicked(!isClicked)
-            setIsInFavourites(!isInFavourites);
+            window.location.reload();
         } catch(err) {
             console.error(err)
         }
     }
-
 
     return (
         <div className="video-container">
