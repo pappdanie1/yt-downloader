@@ -12,7 +12,7 @@ const Header = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
         localStorage.removeItem('role');
         setIsLoggedIn(false);
         setIsAdmin(false);
-        navigate("/")
+        navigate("/");
     };
 
     return (

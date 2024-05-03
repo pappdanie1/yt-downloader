@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './Pages/Home'
@@ -12,7 +12,6 @@ import Profile from './Pages/Profile';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !==  null ? true : false);
   const [isAdmin, setIsAdmin] = useState(localStorage.getItem('role') ===  "Admin" ? true : false);
-  console.log(isAdmin);
 
   return (
     <BrowserRouter>
