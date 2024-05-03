@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from './Pages/Home'
 import Video from './Pages/Video';
 import Login from './Pages/Login';
@@ -13,14 +13,18 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') !==  null ? true : false);
   const [isAdmin, setIsAdmin] = useState(localStorage.getItem('role') ===  "Admin" ? true : false);
 
+  const redirectToHomeIfLoggedIn = () => {
+    return isLoggedIn ? <Navigate to="/" /> : null;
+  };
+
   return (
     <BrowserRouter>
     <Header setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
       <Routes>
         <Route path="/" element={<Home isAdmin={isAdmin} isLoggedIn={isLoggedIn}/>}/>
         <Route path="video/:videoId" element={<Video isLoggedIn={isLoggedIn} />} />
-        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setIsAdmin={setIsAdmin}/>} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={redirectToHomeIfLoggedIn() || <Login setIsLoggedIn={setIsLoggedIn} setIsAdmin={setIsAdmin}/>} />
+        <Route path="/register" element={redirectToHomeIfLoggedIn() || <Register />} />
         <Route path="/profile/:username" element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
       </Routes>
     </BrowserRouter>
