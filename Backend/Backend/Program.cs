@@ -1,11 +1,11 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using Backend.Controllers;
 using Backend.Data;
 using Backend.Services.Authentication;
 using Backend.Services.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -27,6 +27,8 @@ var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
 var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+scope.ServiceProvider.GetService<YtDbContext>().Database.Migrate();
+
 authenticationSeeder.AddRoles();
 authenticationSeeder.AddAdmin();
 
@@ -38,11 +40,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
-app.UseCors(options => 
-    options.WithOrigins("http://localhost:5173") 
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials()); 
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -97,14 +95,19 @@ void ConfigureSwagger()
 
 void AddDbContext()
 {
-    builder.Services.AddDbContext<UsersContext>();
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Services.AddDbContext<YtDbContext>(options =>
+        options.UseSqlServer(connectionString, sqlOption =>
+        {
+            sqlOption.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+        }));
 }
 
 void AddAuthentication()
 {
-    var validIssuer = config["JwtSettings:ValidIssuer"];
-    var validAudience = config["JwtSettings:ValidAudience"];
-    var issuerSigningKey = secret["SigningKey:IssuerSigningKey"];
+    var validIssuer = Environment.GetEnvironmentVariable("JWSETTINGS__VALIDISSUER") ?? config["JwtSettings:ValidIssuer"];
+    var validAudience = Environment.GetEnvironmentVariable("JWSETTINGS__VALIDAUDIENCE") ?? config["JwtSettings:ValidAudience"];
+    var issuerSigningKey = Environment.GetEnvironmentVariable("SIGNINGKEY__ISSUERSIGNINGKEY") ?? secret["SigningKey:IssuerSigningKey"];
     
     builder.Services
         .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -140,5 +143,5 @@ void AddIdentity()
             options.Password.RequireLowercase = false;
         })
         .AddRoles<IdentityRole>()
-        .AddEntityFrameworkStores<UsersContext>();
+        .AddEntityFrameworkStores<YtDbContext>();
 }

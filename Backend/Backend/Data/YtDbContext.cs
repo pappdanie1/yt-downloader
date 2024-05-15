@@ -5,27 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data;
 
-public class UsersContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
+public class YtDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
 {
-    private readonly IConfiguration _configuration;
-
-    public UsersContext(IConfiguration configuration)
+    public YtDbContext(DbContextOptions<YtDbContext> options) : base(options)
     {
-        _configuration = configuration;
     }
     
     public DbSet<FavouriteVideo> Favourites { get; set; }
     public DbSet<FeaturedVideo> FeaturedVideos { get; set; }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        string connectionString = _configuration.GetConnectionString("DefaultConnection");
-        optionsBuilder.UseSqlServer(connectionString, options =>
-        {
-            options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-        });
-    }
-    
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
