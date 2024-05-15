@@ -15,3 +15,4 @@ YouTube Downloader is a web application that allows users to search for and down
 - **Database**: Microsoft SQL Server (MSSQL) database running in Docker, managed using Entity Framework Core.
 - **Authentication**: JSON Web Tokens (JWT) are used for user authentication and authorization.
 - **Frontend**: React is used to build the user interface.
+- **Install**: run docker-compose up in your terminal.
