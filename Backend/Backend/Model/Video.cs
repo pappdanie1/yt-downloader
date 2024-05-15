@@ -1,6 +1,6 @@
 namespace Backend.Model;
 
-public class FeaturedVideo
+public class Video
 {
     public int Id { get; set; }
     public string videoId { get; set; }
