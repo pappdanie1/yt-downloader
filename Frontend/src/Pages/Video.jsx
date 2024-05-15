@@ -38,7 +38,7 @@ const Video = ({ isLoggedIn }) => {
     useEffect(() => {
         const fetchVideo = async () => {
             try {
-                const response = await fetch(`http://localhost:5048/Youtube/VideoInfo?url=${videoId}`);
+                const response = await fetch(`http://localhost:8080/Youtube/VideoInfo?url=${videoId}`);
                 const data = await response.json();
                 setData(data);
             } catch(err) {
@@ -47,7 +47,7 @@ const Video = ({ isLoggedIn }) => {
         };
         fetchVideo();
         const fetchFavs = async () => {
-            const response = await fetch(`http://localhost:5048/User/GetAllFavourites`, {
+            const response = await fetch(`http://localhost:8080/User/GetAllFavourites`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -65,7 +65,7 @@ const Video = ({ isLoggedIn }) => {
 
     const handleDownloadMp3 = async () => {
         try {
-            const response = await fetch(`http://localhost:5048/Youtube/Mp3Downloader?url=${videoId}`);
+            const response = await fetch(`http://localhost:8080/Youtube/Mp3Downloader?url=${videoId}`);
             const blob = await response.blob();
             const downloadUrl = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -81,7 +81,7 @@ const Video = ({ isLoggedIn }) => {
 
     const handleDownloadMp4 = async () => {
         try {
-            const response = await fetch(`http://localhost:5048/Youtube/Mp4Downloader?url=${videoId}`);
+            const response = await fetch(`http://localhost:8080/Youtube/Mp4Downloader?url=${videoId}`);
             const blob = await response.blob();
             const downloadUrl = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -103,7 +103,7 @@ const Video = ({ isLoggedIn }) => {
         e.preventDefault()
         try {
             if (isInFavourites) {
-                const response = await fetch(`http://localhost:5048/User/DeleteFavourite?id=${fav.id}`, {
+                const response = await fetch(`http://localhost:8080/User/DeleteFavourite?id=${fav.id}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -112,7 +112,7 @@ const Video = ({ isLoggedIn }) => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
             } else {
-                const response = await fetch(`http://localhost:5048/User/AddFavourite`, {
+                const response = await fetch(`http://localhost:8080/User/AddFavourite`, {
                     method: 'Post',
                     headers: { 'Content-Type': 'application/json',
                             'Authorization': `Bearer ${localStorage.getItem('token')}` },

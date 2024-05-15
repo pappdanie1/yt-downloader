@@ -34,12 +34,14 @@ public class AuthenticationSeeder
 
     private async Task CreateAdminRole(RoleManager<IdentityRole> roleManager)
     {
-        await roleManager.CreateAsync(new IdentityRole(_configuration["Roles:1"])); 
+        var role = Environment.GetEnvironmentVariable("ROLES__1") ?? _configuration["Roles:1"];
+        await roleManager.CreateAsync(new IdentityRole(role)); 
     }
 
     async Task CreateUserRole(RoleManager<IdentityRole> roleManager)
     {
-        await roleManager.CreateAsync(new IdentityRole(_configuration["Roles:2"]));
+        var role = Environment.GetEnvironmentVariable("ROLES__2") ?? _configuration["Roles:2"];
+        await roleManager.CreateAsync(new IdentityRole(role));
     }
 
 

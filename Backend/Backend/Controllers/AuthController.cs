@@ -1,6 +1,5 @@
 using Backend.Contracts;
 using Backend.Data;
-using Backend.Migrations;
 using Backend.Services.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

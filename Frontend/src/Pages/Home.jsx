@@ -12,7 +12,7 @@ const Home = ({ isAdmin, isLoggedIn }) => {
 
     const fetchVideos = async () => {
         try {
-            const response = await fetch(`http://localhost:5048/Youtube/Search?name=${search}`);
+            const response = await fetch(`http://localhost:8080/Youtube/Search?name=${search}`);
             const data = await response.json();
             setVideos(data);
         } catch(err) {
@@ -23,7 +23,7 @@ const Home = ({ isAdmin, isLoggedIn }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:5048/FeaturedVideos/GetAll');
+                const response = await fetch('http://localhost:8080/FeaturedVideos/GetAll');
                 const data = await response.json();
                 setFeatured(data);
             } catch(err) {
@@ -36,7 +36,7 @@ const Home = ({ isAdmin, isLoggedIn }) => {
     useEffect(() => {
         const fetchVideoInfo = async () => {
             try {
-                const response = await fetch(`http://localhost:5048/Youtube/VideoInfo?url=${url}`);
+                const response = await fetch(`http://localhost:8080/Youtube/VideoInfo?url=${url}`);
                 const data = await response.json();
                 setVideo(data);
             } catch(err) {
@@ -59,7 +59,7 @@ const Home = ({ isAdmin, isLoggedIn }) => {
 
     const handleAddFeatured = async () => {
         try {
-            const response = await fetch('http://localhost:5048/FeaturedVideos/Add', {
+            const response = await fetch('http://localhost:8080/FeaturedVideos/Add', {
                 method: 'Post',
                 headers: { 'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}` },
@@ -77,7 +77,7 @@ const Home = ({ isAdmin, isLoggedIn }) => {
     const handleRemove = async (e, id) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:5048/FeaturedVideos/Delete?id=${id}`, {
+            const response = await fetch(`http://localhost:8080/FeaturedVideos/Delete?id=${id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json',
                             'Authorization': `Bearer ${localStorage.getItem('token')}` }

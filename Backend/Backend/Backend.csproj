@@ -22,4 +22,10 @@
         <PackageReference Include="YoutubeExplode.Converter" Version="6.3.14" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
 </Project>

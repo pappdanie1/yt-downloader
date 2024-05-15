@@ -6,9 +6,9 @@ namespace Backend.Services.Repositories;
 public class FeaturedVideoRepository : IFeaturedVideoRepository
 {
     
-    private readonly UsersContext _context;
+    private readonly YtDbContext _context;
 
-    public FeaturedVideoRepository(UsersContext context)
+    public FeaturedVideoRepository(YtDbContext context)
     {
         _context = context;
     }
