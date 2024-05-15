@@ -1,0 +1,35 @@
+﻿version: '3.4'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Qwert1!Asdf2?Yxcv3
+  app:
+    ports:
+      - 8080:80
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    #image: pappdanie1/ytDownloader-app:latest
+    depends_on:
+      - db
+    environment:
+      CONNECTIONSTRINGS__DEFAULTCONNECTION: Server=db;Database=YoutubeDownloaderDB;User Id=sa;Password=Qwert1!Asdf2?Yxcv3;Encrypt=false;
+      SIGNINGKEY__ISSUERSIGNINGKEY: MySecretKey!!!itsARealSecret?Maybe!!!
+      JWSETTINGS__VALIDISSUER: YoutubeDownloader
+      JWSETTINGS__VALIDAUDIENCE: YoutubeDownloader
+      ROLES__1: Admin
+      ROLES__2: User
+    command: ["./wait-for-it.sh", "db:1433", "--", "dotnet", "run"]
+  frontend:
+    build:
+      context: ../Frontend
+      dockerfile: Dockerfile
+    #image: pappdanie1/ytDownloader-frontend:latest
+    ports:
+      - 5173:5173
+    tty: true
