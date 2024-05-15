@@ -30,7 +30,7 @@ public class YtDbContext : IdentityDbContext<ApplicationUser, IdentityRole, stri
 
         modelBuilder.Entity<PlaylistVideo>()
             .HasOne(e => e.PlayList)
-            .WithMany(e => e.PlayListVideos);
+            .WithMany(e => e.PlayListVideos);   
     }
 
 }
