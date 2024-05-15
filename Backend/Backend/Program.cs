@@ -60,6 +60,7 @@ void AddServices()
     builder.Services.AddScoped<AuthenticationSeeder>();
     builder.Services.AddScoped<IFavoriteVideoRepository, FavoriteVideoRepository>();
     builder.Services.AddScoped<IFeaturedVideoRepository, FeaturedVideoRepository>();
+    builder.Services.AddScoped<IPlayListRepository, PlayListRepository>();
 }
 
 void ConfigureSwagger()
