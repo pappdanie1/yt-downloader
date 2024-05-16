@@ -30,7 +30,7 @@ const Profile = (props) => {
 
     const handleDownloadMp3 = async (music) => {
         try {
-            const response = await fetch(`http://localhost:5048/Youtube/Mp3Downloader?url=${music.url}`);
+            const response = await fetch(`http://localhost:8080/Youtube/Mp3Downloader?url=${music.url}`);
             const blob = await response.blob();
             const downloadUrl = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -46,7 +46,7 @@ const Profile = (props) => {
 
     const handleDownloadMp4 = async (music) => {
         try {
-            const response = await fetch(`http://localhost:5048/Youtube/Mp4Downloader?url=${music.url}`);
+            const response = await fetch(`http://localhost:8080/Youtube/Mp4Downloader?url=${music.url}`);
             const blob = await response.blob();
             const downloadUrl = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -62,7 +62,7 @@ const Profile = (props) => {
 
     const handleRemove = async (fav) => {
         try {
-            const response = await fetch(`http://localhost:5048/User/DeleteFavourite?id=${fav.id}`, {
+            const response = await fetch(`http://localhost:8080/User/DeleteFavourite?id=${fav.id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json',
                             'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -83,7 +83,7 @@ const Profile = (props) => {
     const handleAddNew = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:5048/Playlist/AddPlaylist`, {
+            const response = await fetch(`http://localhost:8080/Playlist/AddPlaylist`, {
                 method: 'Post',
                 headers: { 'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}` },
@@ -101,7 +101,7 @@ const Profile = (props) => {
     }
 
     const handleDelete = async (id) => {
-        const response = await fetch(`http://localhost:5048/Playlist/DeletePlaylist?id=${id}`, {
+        const response = await fetch(`http://localhost:8080/Playlist/DeletePlaylist?id=${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -113,7 +113,7 @@ const Profile = (props) => {
     }
 
     const handleRemovePVideo = async (id) => {
-        const response = await fetch(`http://localhost:5048/Playlist/DeleteVideoFromPlaylist?id=${id}`, {
+        const response = await fetch(`http://localhost:8080/Playlist/DeleteVideoFromPlaylist?id=${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -121,7 +121,7 @@ const Profile = (props) => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const playlistsResponse = await fetch(`http://localhost:5048/Playlist/GetAllPlaylists`, {
+        const playlistsResponse = await fetch(`http://localhost:8080/Playlist/GetAllPlaylists`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }

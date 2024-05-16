@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     const fetchFavs = async () => {
-        const response = await fetch(`http://localhost:5048/User/GetAllFavourites`, {
+        const response = await fetch(`http://localhost:8080/User/GetAllFavourites`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -27,7 +27,7 @@ function App() {
     }
     fetchFavs();
     const fetchPlaylists = async () => {
-        const response = await fetch(`http://localhost:5048/Playlist/GetAllPlaylists`, {
+        const response = await fetch(`http://localhost:8080/Playlist/GetAllPlaylists`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
