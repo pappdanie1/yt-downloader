@@ -19,7 +19,7 @@ public class YoutubeController : ControllerBase
         try
         {
             var video = await _youtubeClient.Videos.GetAsync(url);
-            var videoInfo = new VideoInfo
+            var videoInfo = new Video
             {
                 videoId = video.Id.Value,
                 Title = video.Title,

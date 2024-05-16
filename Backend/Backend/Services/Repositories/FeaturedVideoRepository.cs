@@ -13,23 +13,23 @@ public class FeaturedVideoRepository : IFeaturedVideoRepository
         _context = context;
     }
 
-    public IEnumerable<FeaturedVideo> GetAll()
+    public IEnumerable<Video> GetAll()
     {
         return _context.FeaturedVideos.ToList();
     }
 
-    public FeaturedVideo? GetById(int id)
+    public Video? GetById(int id)
     {
         return _context.FeaturedVideos.FirstOrDefault(f => f.Id == id);
     }
 
-    public void Add(FeaturedVideo featuredVideo)
+    public void Add(Video featuredVideo)
     {
         _context.FeaturedVideos.Add(featuredVideo);
         _context.SaveChanges();
     }
 
-    public void Delete(FeaturedVideo featuredVideo)
+    public void Delete(Video featuredVideo)
     {
         _context.FeaturedVideos.Remove(featuredVideo);
         _context.SaveChanges();

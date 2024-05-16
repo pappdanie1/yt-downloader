@@ -180,10 +180,10 @@ namespace Backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,6 +192,48 @@ namespace Backend.Migrations
                         name: "FK_Favourites_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Playlists",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Playlists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Playlists_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlaylistVideos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlayListId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlaylistVideos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlaylistVideos_Playlists_PlayListId",
+                        column: x => x.PlayListId,
+                        principalTable: "Playlists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -239,6 +281,16 @@ namespace Backend.Migrations
                 name: "IX_Favourites_UserId",
                 table: "Favourites",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Playlists_UserId",
+                table: "Playlists",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlaylistVideos_PlayListId",
+                table: "PlaylistVideos",
+                column: "PlayListId");
         }
 
         /// <inheritdoc />
@@ -266,7 +318,13 @@ namespace Backend.Migrations
                 name: "FeaturedVideos");
 
             migrationBuilder.DropTable(
+                name: "PlaylistVideos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Playlists");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

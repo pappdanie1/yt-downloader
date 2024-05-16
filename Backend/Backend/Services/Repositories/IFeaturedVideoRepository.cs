@@ -4,8 +4,8 @@ namespace Backend.Services.Repositories;
 
 public interface IFeaturedVideoRepository
 {
-    IEnumerable<FeaturedVideo> GetAll();
-    FeaturedVideo? GetById(int id);
-    void Add(FeaturedVideo featuredVideo);
-    void Delete(FeaturedVideo featuredVideo);
+    IEnumerable<Video> GetAll();
+    Video? GetById(int id);
+    void Add(Video featuredVideo);
+    void Delete(Video featuredVideo);
 }

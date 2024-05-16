@@ -118,7 +118,60 @@ namespace Backend.Migrations
                     b.ToTable("Favourites");
                 });
 
-            modelBuilder.Entity("Backend.Model.FeaturedVideo", b =>
+            modelBuilder.Entity("Backend.Model.Playlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Playlists");
+                });
+
+            modelBuilder.Entity("Backend.Model.PlaylistVideo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PlayListId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayListId");
+
+                    b.ToTable("PlaylistVideos");
+                });
+
+            modelBuilder.Entity("Backend.Model.Video", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -299,6 +352,28 @@ namespace Backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Backend.Model.Playlist", b =>
+                {
+                    b.HasOne("Backend.Data.ApplicationUser", "User")
+                        .WithMany("Playlists")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Backend.Model.PlaylistVideo", b =>
+                {
+                    b.HasOne("Backend.Model.Playlist", "PlayList")
+                        .WithMany("PlayListVideos")
+                        .HasForeignKey("PlayListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlayList");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -353,6 +428,13 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Data.ApplicationUser", b =>
                 {
                     b.Navigation("Favourites");
+
+                    b.Navigation("Playlists");
+                });
+
+            modelBuilder.Entity("Backend.Model.Playlist", b =>
+                {
+                    b.Navigation("PlayListVideos");
                 });
 #pragma warning restore 612, 618
         }

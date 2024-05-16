@@ -31,7 +31,7 @@ public class FeaturedVideosController : ControllerBase
     }
     
     [HttpPost("Add"), Authorize(Roles="Admin")]
-    public ActionResult Add(FeaturedVideo video)
+    public ActionResult Add(Video video)
     {
         try
         {

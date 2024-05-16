@@ -31,6 +31,7 @@ const Home = ({ isAdmin, isLoggedIn }) => {
             };
         };
         fetchData();
+        
     }, []);
 
     useEffect(() => {
@@ -68,7 +69,8 @@ const Home = ({ isAdmin, isLoggedIn }) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            window.location.reload();
+            const newFeaturedVideo = { title: video.title, author: video.author, image: video.image, duration: video.duration, url: video.url, videoId: video.videoId };
+            setFeatured(prevVideos => [...prevVideos, newFeaturedVideo]);
         } catch(err) {
             console.error(err);
         };
@@ -85,7 +87,7 @@ const Home = ({ isAdmin, isLoggedIn }) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            window.location.reload();
+            setFeatured(prevVideos => prevVideos.filter(video => video.id !== id));
         } catch(err) {
             console.error(err);
         };
