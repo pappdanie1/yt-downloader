@@ -11,7 +11,7 @@ const Login = ({ setIsLoggedIn, setIsAdmin }) => {
     const handleSubmit = async(e) => {
         e.preventDefault()
         try {
-            const response = await fetch(`http://localhost:8080/Auth/Login`, {
+            const response = await fetch(`http://localhost:5048/Auth/Login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify( { email, password } )

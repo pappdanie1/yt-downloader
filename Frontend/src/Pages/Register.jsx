@@ -12,7 +12,7 @@ const Register = () => {
     const handleSubmit = async(e) => {
         e.preventDefault()
         try {
-            const response = await fetch(`http://localhost:8080/Auth/Register`, {
+            const response = await fetch(`http://localhost:5048/Auth/Register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify( { email, username, password } )

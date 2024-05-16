@@ -8,7 +8,7 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`http://localhost:8080/User/GetAllFavourites`, {
+            const response = await fetch(`http://localhost:5048/User/GetAllFavourites`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -21,7 +21,7 @@ const Profile = () => {
 
     const handleDownloadMp3 = async (music) => {
         try {
-            const response = await fetch(`http://localhost:8080/Youtube/Mp3Downloader?url=${music.url}`);
+            const response = await fetch(`http://localhost:5048/Youtube/Mp3Downloader?url=${music.url}`);
             const blob = await response.blob();
             const downloadUrl = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -37,7 +37,7 @@ const Profile = () => {
 
     const handleDownloadMp4 = async (music) => {
         try {
-            const response = await fetch(`http://localhost:8080/Youtube/Mp4Downloader?url=${music.url}`);
+            const response = await fetch(`http://localhost:5048/Youtube/Mp4Downloader?url=${music.url}`);
             const blob = await response.blob();
             const downloadUrl = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -53,7 +53,7 @@ const Profile = () => {
 
     const handleRemove = async (fav) => {
         try {
-            const response = await fetch(`http://localhost:8080/User/DeleteFavourite?id=${fav.id}`, {
+            const response = await fetch(`http://localhost:5048/User/DeleteFavourite?id=${fav.id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json',
                             'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -61,7 +61,7 @@ const Profile = () => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            window.location.reload();
+            setFavourites(prevVideos => prevVideos.filter(video => video.id !== fav.id));
         }catch (err) {
             console.error(err);
         }
