@@ -158,7 +158,14 @@ const Video = (props) => {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             setSelectedPlaylist("")
-            alert('Added to playlist')
+
+            const playlistsResponse = await fetch(`http://localhost:5048/Playlist/GetAllPlaylists`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const updatedPlaylists = await playlistsResponse.json();
+            props.setPlaylists(updatedPlaylists);
         } catch (err) {
             console.error(err);
         }
@@ -177,13 +184,14 @@ const Video = (props) => {
                 {props.isLoggedIn ? (
                     <div>
                         <button onClick={handleToggleFavourites}>{isInFavourites ? "Remove from favourites" : "Add to favourites"}</button>
-                        <p>or</p>
-                        <select name="playlist" id="playlist" onChange={(e) => setSelectedPlaylist(e.target.value)}>
-                            <option value="">Select a playlist</option>
-                            {props.playlists.map((item) => (
-                                <option key={item.id} value={item.id}>{item.name}</option>
-                            ))}
-                        </select>
+                        <div className="video-select">
+                            <select name="playlist" id="playlist" onChange={(e) => setSelectedPlaylist(e.target.value)}>
+                                <option value="">Select a playlist</option>
+                                {props.playlists.map((item) => (
+                                    <option key={item.id} value={item.id}>{item.name}</option>
+                                ))}
+                            </select>
+                        </div>
                         <div>
                         {selectedPlaylist !== "" ? (
                             <button onClick={handleAddToPlaylist}>Add to playlist</button>
