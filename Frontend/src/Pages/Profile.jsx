@@ -112,6 +112,36 @@ const Profile = (props) => {
         props.setPlaylists(prevPlaylists => prevPlaylists.filter(playlist => playlist.id !== id));
     }
 
+    const handleRemovePVideo = async (id) => {
+        const response = await fetch(`http://localhost:5048/Playlist/DeleteVideoFromPlaylist?id=${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            })
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const playlistsResponse = await fetch(`http://localhost:5048/Playlist/GetAllPlaylists`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        const updatedPlaylists = await playlistsResponse.json();
+        props.setPlaylists(updatedPlaylists);
+    }
+
+    const handleDownloadPlaylistMp3 = (videos) => {
+        videos.forEach(video => {
+            handleDownloadMp3(video);
+        });
+    }
+
+    const handleDownloadPlaylistMp4 = (videos) => {
+        videos.forEach(video => {
+            handleDownloadMp4(video);
+        });
+    }
+
     return (
         <div className="profile-container">
             <h2 className="profile-title">{username}'s favourites</h2>
@@ -128,30 +158,39 @@ const Profile = (props) => {
                     </div>
                 ))}
             </div>
-            <div className="profile-playlists" >
+            <div className="profile-playlists">
                 <h2>Playlists</h2>
                 {props.playlists.map((item) => (
-                    <div key={item.id} >
-                        <p>{item.name}</p>
-                        <div className="video-buttons" >
+                    <div key={item.id} className="playlist-video">
+                        <h4>{item.name}</h4>
+                        <div className="playlist-container">
+                            {item.playListVideos.map((video) => (
+                                <div key={video.id} style={{ position: 'relative' }}>
+                                    <img src={video.image} alt="thumbnail" />
+                                    <button className="delete-button-pv" onClick={() => handleRemovePVideo(video.id)} >remove</button>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="video-buttons">
                             <button onClick={() => handleDelete(item.id)}>Delete</button>
+                            <button onClick={() => handleDownloadPlaylistMp3(item.playListVideos)}>mp3</button>
+                            <button onClick={() => handleDownloadPlaylistMp4(item.playListVideos)}>mp4</button>
                         </div>
                     </div>
                 ))}
                 {addingNew ? (
-                    <div>
-                        <form onSubmit={handleAddNew} >
+                    <div className="new-playlist-form">
+                        <form onSubmit={handleAddNew}>
                             <label htmlFor="name">Name</label>
-                            <input type="text" id="name" placeholder="Enter name here" onChange={(e) => setName(e.target.value)}/>
-                            <button type="submit" >Add</button>
+                            <input type="text" id="name" placeholder="Enter name here" onChange={(e) => setName(e.target.value)} />
+                            <button type="submit">Add</button>
                         </form>
                     </div>
                 ) : (
-                    <div className="video-buttons" >
-                        <button onClick={handleClickNew} >New Playlist</button>
+                    <div className="video-buttons">
+                        <button onClick={handleClickNew}>Create New Playlist</button>
                     </div>
                 )}
-
             </div>
         </div>
     );
