@@ -2,15 +2,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import '../css/Video.css'
 
-const Video = ({ isLoggedIn }) => {
+const Video = (props) => {
     const navigate = useNavigate();
     const [data, setData] = useState({});
-    const [favourites, setFavourites] = useState([])
     const { videoId } = useParams();
     const [isInFavourites, setIsInFavourites] = useState(false);
     const [fav, setFav] = useState({});
-
-    const requestBody = {
+    const [selectedPlaylist, setSelectedPlaylist] = useState("")
+    const requestVideoBody = {
         "id": 0,
         "userId": "dummyUserId",
         "title": data.title,
@@ -34,6 +33,33 @@ const Video = ({ isLoggedIn }) => {
           "accessFailedCount": 0
         }
     };
+    const requestPlaylistVideoBody = {
+        "id": 0,
+        "title": data.title,
+        "image": data.image,
+        "url": data.url,
+        "playList": {
+          "id": 0,
+          "name": "string",
+          "user": {
+            "id": "string",
+            "userName": "string",
+            "normalizedUserName": "string",
+            "email": "string",
+            "normalizedEmail": "string",
+            "emailConfirmed": true,
+            "passwordHash": "string",
+            "securityStamp": "string",
+            "concurrencyStamp": "string",
+            "phoneNumber": "string",
+            "phoneNumberConfirmed": true,
+            "twoFactorEnabled": true,
+            "lockoutEnd": "2024-05-15T18:50:54.686Z",
+            "lockoutEnabled": true,
+            "accessFailedCount": 0
+          }
+        }
+      }
 
     useEffect(() => {
         const fetchVideo = async () => {
@@ -46,22 +72,12 @@ const Video = ({ isLoggedIn }) => {
             }
         };
         fetchVideo();
-        const fetchFavs = async () => {
-            const response = await fetch(`http://localhost:5048/User/GetAllFavourites`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            const data = await response.json();
-            setFavourites(data);
-        }
-        fetchFavs();
     }, [videoId]);
 
     useEffect(() => {
-        setIsInFavourites(favourites.some(video => video.url === data.url));
-        setFav(favourites.find(video => video.url === data.url))
-    }, [favourites, data.url]);
+        setIsInFavourites(props.favourites.some(video => video.url === data.url));
+        setFav(props.favourites.find(video => video.url === data.url))
+    }, [props.favourites, data.url]);
 
     const handleDownloadMp3 = async () => {
         try {
@@ -111,22 +127,40 @@ const Video = ({ isLoggedIn }) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                setFavourites(prevVideos => prevVideos.filter(video => video.id !== fav.id));
+                props.setFavourites(prevVideos => prevVideos.filter(video => video.id !== fav.id));
             } else {
                 const response = await fetch(`http://localhost:5048/User/AddFavourite`, {
                     method: 'Post',
                     headers: { 'Content-Type': 'application/json',
                             'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                    body: JSON.stringify(requestBody)
+                    body: JSON.stringify(requestVideoBody)
                 })
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                const newFavVideo = requestBody;
-                setFavourites(prevVideos => [...prevVideos, newFavVideo]);
+                const newFavVideo = await response.json();
+                props.setFavourites(prevVideos => [...prevVideos, newFavVideo]);
             }
         } catch(err) {
             console.error(err)
+        }
+    }
+
+    const handleAddToPlaylist = async () => {
+        try {
+            const response = await fetch(`http://localhost:5048/Playlist/AddVideoToPlaylist?playListId=${selectedPlaylist}`, {
+                method: 'Post',
+                headers: { 'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: JSON.stringify(requestPlaylistVideoBody)
+            })
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            setSelectedPlaylist("")
+            alert('Added to playlist')
+        } catch (err) {
+            console.error(err);
         }
     }
 
@@ -140,13 +174,27 @@ const Video = ({ isLoggedIn }) => {
                 <button onClick={handleDownloadMp3}>mp3</button>
                 <button onClick={handleDownloadMp4}>mp4</button>
                 <button onClick={handleBack}>Cancel</button>
-                {isLoggedIn ? (
-                    <button onClick={handleToggleFavourites}>{isInFavourites ? "Remove from favourites" : "Add to favourites"}</button>
+                {props.isLoggedIn ? (
+                    <div>
+                        <button onClick={handleToggleFavourites}>{isInFavourites ? "Remove from favourites" : "Add to favourites"}</button>
+                        <p>or</p>
+                        <select name="playlist" id="playlist" onChange={(e) => setSelectedPlaylist(e.target.value)}>
+                            <option value="">Select a playlist</option>
+                            {props.playlists.map((item) => (
+                                <option key={item.id} value={item.id}>{item.name}</option>
+                            ))}
+                        </select>
+                        <div>
+                        {selectedPlaylist !== "" ? (
+                            <button onClick={handleAddToPlaylist}>Add to playlist</button>
+                        ) : null}
+                        </div>
+                    </div>
                 ) : (
                     <></>
                 )}
             </div>
-    </div>
+        </div>
     )
 }
 
