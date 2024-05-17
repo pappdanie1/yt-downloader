@@ -19,9 +19,9 @@ YouTube Downloader is a web application that allows users to search for and down
 - **Frontend**: React is used to build the user interface.
 
 ## Install
-
-1. Navigate to the `/backend` folder.
-2. Run the following command in your terminal:
+1. Ensure that the following line (line 30.) in program.cs is uncommented: //scope.ServiceProvider.GetService<YtDbContext>().Database.Migrate();
+2. Navigate to the `/backend` folder.
+3. Run the following command in your terminal:
 
 ```bash
 docker-compose up
