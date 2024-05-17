@@ -20,9 +20,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 7.0.x
     - name: Restore dependencies
-      run: dotnet restore --timeout 600000
+      run: dotnet restore 
       working-directory: ./Backend
     - name: Build
       run: dotnet build --no-restore
