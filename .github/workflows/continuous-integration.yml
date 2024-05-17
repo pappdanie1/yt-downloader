@@ -29,4 +29,4 @@ jobs:
       working-directory: ./Backend
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      working-directory: ./Backend
+      working-directory: ./Backend/YtDownloaderIntegrationTests
