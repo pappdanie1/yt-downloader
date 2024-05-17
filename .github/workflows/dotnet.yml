@@ -9,6 +9,13 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      JWSETTINGS__VALIDISSUER: ${{ secrets.JWSETTINGS__VALIDISSUER }}
+      JWSETTINGS__VALIDAUDIENCE: ${{ secrets.JWSETTINGS__VALIDAUDIENCE }}
+      SIGNINGKEY__ISSUERSIGNINGKEY: ${{ secrets.SIGNINGKEY__ISSUERSIGNINGKEY }}
+      DEFAULTCONNECTION: ${{ secrets.DEFAULTCONNECTION }}
+      ROLES__1: ${{ secrets.ROLES__1 }}
+      ROLES__2: ${{ secrets.ROLES__1 }}
 
     steps:
     - uses: actions/checkout@v4
