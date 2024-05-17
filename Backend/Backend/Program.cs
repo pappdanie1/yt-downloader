@@ -146,3 +146,5 @@ void AddIdentity()
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<YtDbContext>();
 }
+
+public partial class Program { }
