@@ -27,7 +27,7 @@ var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
 var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
-scope.ServiceProvider.GetService<YtDbContext>().Database.Migrate();
+//scope.ServiceProvider.GetService<YtDbContext>().Database.Migrate();
 
 authenticationSeeder.AddRoles();
 authenticationSeeder.AddAdmin();
