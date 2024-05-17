@@ -18,6 +18,11 @@ public class YoutubeController : ControllerBase
     {
         try
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                return BadRequest("Please enter a url.");
+            }
+            
             var video = await _youtubeClient.Videos.GetAsync(url);
             var videoInfo = new Video
             {
@@ -41,6 +46,10 @@ public class YoutubeController : ControllerBase
     {
         try
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                return BadRequest("Please enter a search term.");
+            }
             var results = _youtubeClient.Search.GetVideosAsync(name);
 
             var videoResults = new List<VideoSearchResult>();
@@ -64,6 +73,11 @@ public class YoutubeController : ControllerBase
     {
         try
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                return BadRequest("Please enter a url.");
+            }
+            
             var streamManifest = await _youtubeClient.Videos.Streams.GetManifestAsync(url);
             var audio = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
         
@@ -88,6 +102,11 @@ public class YoutubeController : ControllerBase
     {
         try
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                return BadRequest("Please enter a url.");
+            }
+            
             var streamManifest = await _youtubeClient.Videos.Streams.GetManifestAsync(url);
             var audio = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
         
